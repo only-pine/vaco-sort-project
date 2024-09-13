@@ -2,8 +2,20 @@ const inputNumber = document.getElementById("inputNumber");
 const submitButton = document.getElementById("submitButton");
 const graphContainer = document.querySelector(".graph-container");
 const inputNumberArray = [];
-let isGraph = false;
+let hasGraph = false;
 let maxInputNumber = 0;
+
+function toggleButton() {
+  const submitButtonBox =
+    document.getElementsByClassName("submit-button-box")[0];
+  if (submitButton.disabled === false) {
+    submitButton.disabled = true;
+    submitButtonBox.style.backgroundColor = "gray";
+  } else {
+    submitButton.disabled = false;
+    submitButtonBox.style.backgroundColor = "blue";
+  }
+}
 
 async function mergeSort(arr, startIndex) {
   if (arr.length === 1) return arr;
@@ -47,7 +59,7 @@ async function mergeSort(arr, startIndex) {
 }
 
 function clickSumbit() {
-  if (isGraph) {
+  if (hasGraph) {
     resetGraphBar();
   }
 
@@ -72,7 +84,7 @@ function clickSumbit() {
   createGraphBar();
 }
 
-function createGraphBar() {
+async function createGraphBar() {
   maxInputNumber = Math.max(...inputNumberArray);
 
   for (let index = 0; index < inputNumberArray.length; index++) {
@@ -89,9 +101,10 @@ function createGraphBar() {
     graphBox.appendChild(graphBar);
     graphContainer.appendChild(graphBox);
   }
-
-  mergeSort(inputNumberArray, 0);
-  isGraph = true;
+  toggleButton();
+  await mergeSort(inputNumberArray, 0);
+  toggleButton();
+  hasGraph = true;
 }
 
 function resetGraphBar() {
