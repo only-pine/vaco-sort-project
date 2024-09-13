@@ -6,56 +6,79 @@ let hasGraph = false;
 let maxInputNumber = 0;
 
 function toggleButton() {
-  const submitButtonBox =
-    document.getElementsByClassName("submit-button-box")[0];
+  const submitButtonBox = document.getElementsByClassName("submit-button-box")[0];
+
   if (submitButton.disabled === false) {
     submitButton.disabled = true;
-    submitButtonBox.style.backgroundColor = "gray";
+
+    submitButtonBox.classList.remove("submit-button-box-blue");
+    submitButtonBox.classList.add("submit-button-box-gray");
   } else {
     submitButton.disabled = false;
-    submitButtonBox.style.backgroundColor = "blue";
+
+    submitButtonBox.classList.remove("submit-button-box-gray");
+    submitButtonBox.classList.add("submit-button-box-blue");
   }
 }
 
-async function mergeSort(arr, startIndex) {
-  if (arr.length === 1) return arr;
+async function mergeSort(array, startIndex) {
+  if (array.length === 1) {
+    return array;
+  }
+
   await new Promise((resolve) => setTimeout(resolve, 500));
 
-  const half = Math.ceil(arr.length / 2);
-  const left = await mergeSort(arr.slice(0, half), startIndex);
-  const right = await mergeSort(arr.slice(half), startIndex + half);
+  const half = Math.ceil(array.length / 2);
+  const leftArray = await mergeSort(array.slice(0, half), startIndex);
+  const rightArray = await mergeSort(array.slice(half), startIndex + half);
 
-  const sortedArr = [...left, ...right].sort((a, b) => a - b);
+  const mergedArray = [];
 
-  for (let i = 0; i < sortedArr.length; i++) {
-    const graphEl = document.getElementById(`graph-${startIndex + i}`);
-    const graphBar = graphEl.getElementsByTagName("div")[0];
+  while (leftArray.length && rightArray.length) {
+    if (leftArray[0] <= rightArray[0]){
+      mergedArray.push(leftArray.shift());
+    } else {
+      mergedArray.push(rightArray.shift());
+    }
+  }
 
-    graphBar.style.backgroundColor = "red";
+  const sortedArray = [...mergedArray, ...leftArray, ...rightArray];
+
+  for (let i = 0; i < sortedArray.length; i++) {
+    const graphWrapper = document.getElementById(`graph-${startIndex + i}`);
+    const graphBar = graphWrapper.getElementsByTagName("div")[0];
+
+    if (graphBar.classList.contains("graph-bar-blue")) {
+      graphBar.classList.remove("graph-bar-blue");
+    }
+    graphBar.classList.add("graph-bar-red");
   }
 
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  for (let i = 0; i < sortedArr.length; i++) {
-    const graphEl = document.getElementById(`graph-${startIndex + i}`);
-    const graphBar = graphEl.getElementsByTagName("div")[0];
-    const graphBarValue = graphEl.getElementsByTagName("p")[0];
+  for (let i = 0; i < sortedArray.length; i++) {
+    const graphWrapper = document.getElementById(`graph-${startIndex + i}`);
+    const graphBar = graphWrapper.getElementsByTagName("div")[0];
+    const graphBarValue = graphWrapper.getElementsByTagName("p")[0];
 
-    const newHeight = 100 * (sortedArr[i] / maxInputNumber);
+    const newHeight = 100 * (sortedArray[i] / maxInputNumber);
     graphBar.style.height = `${newHeight}%`;
-    graphBarValue.innerText = sortedArr[i];
+    graphBarValue.innerText = sortedArray[i];
   }
 
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  for (let i = 0; i < sortedArr.length; i++) {
-    const graphEl = document.getElementById(`graph-${startIndex + i}`);
-    const graphBar = graphEl.getElementsByTagName("div")[0];
+  for (let i = 0; i < sortedArray.length; i++) {
+    const graphWrapper = document.getElementById(`graph-${startIndex + i}`);
+    const graphBar = graphWrapper.getElementsByTagName("div")[0];
 
-    graphBar.style.backgroundColor = "lightBlue";
+    if (graphBar.classList.contains("graph-bar-red")) {
+      graphBar.classList.remove("graph-bar-red");
+    }
+    graphBar.classList.remove("graph-bar-blue");
   }
 
-  return sortedArr;
+  return sortedArray;
 }
 
 function clickSumbit() {
@@ -73,6 +96,10 @@ function clickSumbit() {
     }
   }
 
+  if (filteredText.slice(-1) === ",") {
+    filteredText = filteredText.slice(0, filteredText.length - 1);
+  }
+
   inputNumber.value = filteredText;
   inputNumberArray.push(
     ...filteredText
@@ -88,22 +115,25 @@ async function createGraphBar() {
   maxInputNumber = Math.max(...inputNumberArray);
 
   for (let index = 0; index < inputNumberArray.length; index++) {
-    const graphBarHeight = 100 * (inputNumberArray[index] / maxInputNumber);
-    const graphBox = document.createElement("li");
+    const graphWrapper = document.createElement("li");
     const graphBarValue = document.createElement("p");
     const graphBar = document.createElement("div");
-    graphBox.id = "graph-" + index;
 
+    graphWrapper.id = "graph-" + index;
     graphBarValue.innerText = inputNumberArray[index];
+
+    const graphBarHeight = 100 * (inputNumberArray[index] / maxInputNumber);
     graphBar.style.height = `${graphBarHeight}%`;
 
-    graphBox.appendChild(graphBarValue);
-    graphBox.appendChild(graphBar);
-    graphContainer.appendChild(graphBox);
+    graphWrapper.appendChild(graphBarValue);
+    graphWrapper.appendChild(graphBar);
+    graphContainer.appendChild(graphWrapper);
   }
+
   toggleButton();
   await mergeSort(inputNumberArray, 0);
   toggleButton();
+
   hasGraph = true;
 }
 

@@ -26,13 +26,20 @@ body {
   display: flex;
   width: 70px;
   height: 50px;
-  background-color: blue;
-  color: white;
+  color: #FFFFFF;
   flex-direction: row;
   text-align: center;
   justify-content: center;
   margin: 20px auto;
   border-radius: 10px;
+}
+
+.submit-button-box-blue {
+  background-color: #1646F9;
+}
+
+.submit-button-box-gray {
+  background-color: #BBBBBD;
 }
 
 .graph-container {
@@ -41,7 +48,9 @@ body {
   justify-content: center;
   margin-top: 50px;
   transform: scaleY(-1);
-  height: 300px;
+  position: relative;
+  height: 400px;
+  width: 100%;
 }
 
 .graph-container li {
@@ -50,40 +59,26 @@ body {
 
 .graph-container li div {
   position: relative;
-  width: 50px;
+  width: 30px;
   height: 400px;
-  background-color: #89b7ff;
+  background-color: #5acff8;
   margin: 0 auto;
+  transition: height 0.5s ease;
 }
 
 .graph-container li p {
   font-size: 20px;
   color: #222;
   text-align: center;
-  margin-bottom: 5px;
+  margin: 0 0 5px;
+  padding: 5px;
   transform: scaleY(-1);
 }
 
-/* .graph-container li div {
-  width: 30px;
-  background-color: lightblue;
-  transition: height 0.5s ease;
-} */
-
-.graph-container {
-  position: relative; /* Container for absolutely positioned elements */
-  height: 400px;
-  width: 100%;
+.graph-bar-red {
+  background-color: #f86b5a !important;
 }
 
-.graph-container li div {
-  width: 30px;
-  background-color: lightblue;
-  transition: height 0.5s ease; /* Smooth height transition */
-}
-
-.graph-container li p {
-  margin: 0;
-  padding: 5px;
-  text-align: center;
+.graph-bar-blue {
+  background-color: #5acff8 !important;
 }
