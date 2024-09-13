@@ -3,6 +3,7 @@ const submitButton = document.getElementById("submitButton");
 const graphContainer = document.querySelector(".graph-container");
 const inputNumberArray = [];
 let isGraph = false;
+let maxInputNumber = 0;
 
 async function mergeSort(arr, startIndex) {
   if (arr.length === 1) return arr;
@@ -28,8 +29,8 @@ async function mergeSort(arr, startIndex) {
     const graphBar = graphEl.getElementsByTagName("div")[0];
     const graphBarValue = graphEl.getElementsByTagName("p")[0];
 
-    const newHeight = 100 * (sortedArr[i] / 30);
-    graphBar.style.height = newHeight + "px";
+    const newHeight = 100 * (sortedArr[i] / maxInputNumber);
+    graphBar.style.height = `${newHeight}%`;
     graphBarValue.innerText = sortedArr[i];
   }
 
@@ -45,9 +46,11 @@ async function mergeSort(arr, startIndex) {
   return sortedArr;
 }
 
-//console.log(mergeSort([5, 3, 1, 2, 4]));
-
 function clickSumbit() {
+  if (isGraph) {
+    resetGraphBar();
+  }
+
   let filteredText = "";
 
   for (let index = 0; index < inputNumber.value.length; index++) {
@@ -66,34 +69,37 @@ function clickSumbit() {
       .map(Number)
   );
 
-  if (isGraph) {
-    resetGraphBar();
-  }
-
   createGraphBar();
 }
 
 function createGraphBar() {
+  maxInputNumber = Math.max(...inputNumberArray);
+
   for (let index = 0; index < inputNumberArray.length; index++) {
-    const graphBarHeight = 100 * (inputNumberArray[index] / 30);
+    const graphBarHeight = 100 * (inputNumberArray[index] / maxInputNumber);
     const graphBox = document.createElement("li");
     const graphBarValue = document.createElement("p");
     const graphBar = document.createElement("div");
     graphBox.id = "graph-" + index;
 
     graphBarValue.innerText = inputNumberArray[index];
-    graphBar.style.height = graphBarHeight + "px";
+    graphBar.style.height = `${graphBarHeight}%`;
 
     graphBox.appendChild(graphBarValue);
     graphBox.appendChild(graphBar);
     graphContainer.appendChild(graphBox);
   }
+
   mergeSort(inputNumberArray, 0);
   isGraph = true;
 }
 
 function resetGraphBar() {
-  graphContainer.removeChild(document.querySelectorAll(".li"));
+  inputNumberArray.length = 0;
+
+  while (graphContainer.firstChild) {
+    graphContainer.removeChild(graphContainer.firstChild);
+  }
 }
 
 submitButton.addEventListener("click", clickSumbit);
