@@ -2,11 +2,13 @@ const inputNumber = document.getElementById("inputNumber");
 const submitButton = document.getElementById("submitButton");
 const graphContainer = document.querySelector(".graph-container");
 const inputNumberArray = [];
+let selectedSort = "";
 let hasGraph = false;
 let maxInputNumber = 0;
 
 function toggleButton() {
-  const submitButtonBox = document.getElementsByClassName("submit-button-box")[0];
+  const submitButtonBox =
+    document.getElementsByClassName("submit-button-box")[0];
 
   if (submitButton.disabled === false) {
     submitButton.disabled = true;
@@ -35,7 +37,7 @@ async function mergeSort(array, startIndex) {
   const mergedArray = [];
 
   while (leftArray.length && rightArray.length) {
-    if (leftArray[0] <= rightArray[0]){
+    if (leftArray[0] <= rightArray[0]) {
       mergedArray.push(leftArray.shift());
     } else {
       mergedArray.push(rightArray.shift());
@@ -81,7 +83,57 @@ async function mergeSort(array, startIndex) {
   return sortedArray;
 }
 
-function clickSumbit() {
+async function bubbleSort(array) {
+  const arrLength = array.length;
+
+  for (let i = 0; i < arrLength; i++) {
+    for (let j = 0; j < arrLength - i - 1; j++) {
+      for (let k = j; k < j + 2; k++) {
+        const graphWrapper = document.getElementById(`graph-${k}`);
+        const graphBar = graphWrapper.getElementsByTagName("div")[0];
+
+        graphBar.classList.remove("graph-bar-blue");
+        graphBar.classList.add("graph-bar-red");
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      if (array[j] >= array[j + 1]) {
+        const graph1 = document.getElementById(`graph-${j}`);
+        const graph2 = document.getElementById(`graph-${j + 1}`);
+
+        const grpah1Height = graph1.lastChild;
+        const graph2Height = graph2.lastChild;
+        const tmpHeight = grpah1Height.style.height;
+
+        grpah1Height.style.height = graph2Height.style.height;
+        graph2Height.style.height = tmpHeight;
+
+        const graph1Value = graph1.firstChild;
+        const graph2Value = graph2.firstChild;
+        const tmpValue = graph1Value.innerText;
+
+        graph1Value.innerText = graph2Value.innerText;
+        graph2Value.innerText = tmpValue;
+
+        [array[j], array[j + 1]] = [array[j + 1], array[j]];
+      }
+
+      await new Promise((resolve) => {
+        setTimeout(resolve, 500);
+      });
+
+      for (let k = j; k < j + 2; k++) {
+        const graphWrapper = document.getElementById(`graph-${k}`);
+        const graphBar = graphWrapper.getElementsByTagName("div")[0];
+
+        graphBar.classList.remove("graph-bar-red");
+        graphBar.classList.add("graph-bar-blue");
+      }
+    }
+  }
+}
+
+function clickSubmit() {
   if (hasGraph) {
     resetGraphBar();
   }
@@ -108,6 +160,14 @@ function clickSumbit() {
       .map(Number)
   );
 
+  const radioValue = document.getElementsByName("sort");
+
+  radioValue.forEach((radio) => {
+    if (radio.checked) {
+      selectedSort = radio.value;
+    }
+  });
+
   createGraphBar();
 }
 
@@ -131,7 +191,13 @@ async function createGraphBar() {
   }
 
   toggleButton();
-  await mergeSort(inputNumberArray, 0);
+
+  if (selectedSort === "merge") {
+    await mergeSort(inputNumberArray, 0);
+  } else {
+    await bubbleSort(inputNumberArray);
+  }
+
   toggleButton();
 
   hasGraph = true;
@@ -145,4 +211,4 @@ function resetGraphBar() {
   }
 }
 
-submitButton.addEventListener("click", clickSumbit);
+submitButton.addEventListener("click", clickSubmit);

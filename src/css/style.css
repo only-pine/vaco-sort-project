@@ -26,7 +26,7 @@ body {
   display: flex;
   width: 70px;
   height: 50px;
-  color: #FFFFFF;
+  color: #ffffff;
   flex-direction: row;
   text-align: center;
   justify-content: center;
@@ -35,11 +35,11 @@ body {
 }
 
 .submit-button-box-blue {
-  background-color: #1646F9;
+  background-color: #1646f9;
 }
 
 .submit-button-box-gray {
-  background-color: #BBBBBD;
+  background-color: #bbbbbd;
 }
 
 .graph-container {
@@ -81,4 +81,9 @@ body {
 
 .graph-bar-blue {
   background-color: #5acff8 !important;
+}
+
+.sort-option {
+  margin: 30px 0 10px 0;
+  text-align: center;
 }
