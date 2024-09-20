@@ -7,21 +7,32 @@
     <title>Merge Sort</title>
     <link rel="stylesheet" href="./src/css/reset.css" />
     <link rel="stylesheet" href="./src/css/style.css" />
-    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>​
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+    ​
   </head>
   <body>
-    <div class="title">Merge Sort</div>
+    <div class="title">Sort</div>
 
     <div class="input-box">
-      <input type="text" class="input" id="inputNumber" placeholder="ex) 1,2,3,4,5"/>
+      <input
+        type="text"
+        class="input"
+        id="inputNumber"
+        placeholder="ex) 1,2,3,4,5"
+      />
+    </div>
+    <div class="sort-option">
+      <input type="radio" id="merge" name="sort" value="merge" />
+      <label for="merge">merge sort</label>
+      <input type="radio" id="bubble" name="sort" value="bubble" />
+      <label for="bubble">bubble sort</label>
     </div>
 
     <div class="submit-button-box submit-button-box-blue">
       <button id="submitButton">SUBMIT</button>
     </div>
 
-    <ul class="graph-container">
-    </ul>
+    <ul class="graph-container"></ul>
     <script type="module" src="./src/JavaScript/index.js"></script>
   </body>
 </html>
